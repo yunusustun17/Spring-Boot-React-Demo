@@ -10,7 +10,6 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @CrossOrigin
     @PostMapping("/api/1.0/users")
     public void createUser(@RequestBody User user) {
         log.info("User: {}", user.toString());
