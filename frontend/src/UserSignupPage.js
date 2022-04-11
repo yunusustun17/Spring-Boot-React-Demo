@@ -1,4 +1,5 @@
-import { Component } from "react";
+import {Component} from "react";
+import axios from "axios";
 
 class UserSignupPage extends Component {
 
@@ -17,10 +18,22 @@ class UserSignupPage extends Component {
     }
 
     onChange = event => {
-        const { name, value } = event.target
+        const {name, value} = event.target
         this.setState({
             [name]: value
         })
+    }
+
+    onClickSignup = event => {
+        event.preventDefault();
+        const {username, displayName, password, passwordRepeat, agreedClicked} = this.state;
+        const body = {
+            username,
+            displayName,
+            password,
+        }
+
+        axios.post("http://localhost:8080/api/1.0/users", body);
     }
 
     render() {
@@ -47,7 +60,7 @@ class UserSignupPage extends Component {
                     <input name="agreedClicked" type="checkbox" onChange={this.onChangeAgree}></input> Agreed
                 </div>
                 <div>
-                    <button disabled={!this.state.agreedClicked}>Sign Up</button>
+                    <button onClick={this.onClickSignup} disabled={!this.state.agreedClicked}>Sign Up</button>
                 </div>
             </form>
         );
