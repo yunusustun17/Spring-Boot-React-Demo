@@ -3,9 +3,8 @@ package yunus.ustun.demo.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 import yunus.ustun.demo.common.ApiError;
 import yunus.ustun.demo.common.GenericResponse;
 import yunus.ustun.demo.user.model.User;
@@ -22,28 +21,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/1.0/users")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+    public GenericResponse createUser(@Valid @RequestBody User user) {
+        userService.save(user);
+        return new GenericResponse("User created successfully");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleValidationException(MethodArgumentNotValidException exception) {
         ApiError apiError = new ApiError(400, "Validation Error", "/api/1.0/users");
         Map<String, String> validationErrors = new HashMap<>();
-        String username = user.getUsername();
-        String displayName = user.getDisplayName();
-
-
-        if (username == null || username.isEmpty()) {
-            validationErrors.put("username", "Username is required");
-        }
-
-        if (displayName == null || displayName.isEmpty()) {
-            validationErrors.put("displayName", "Display Name is required");
-        }
-
-        if (validationErrors.size() > 0) {
-            apiError.setValidationErrors(validationErrors);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-        }
-
-        userService.save(user);
-        return ResponseEntity.ok(new GenericResponse("User created successfully"));
+        exception.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((org.springframework.validation.FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            validationErrors.put(fieldName, errorMessage);
+        });
+        apiError.setValidationErrors(validationErrors);
+        return apiError;
     }
 
 }
