@@ -22,11 +22,21 @@ public class UserController {
 
     @PostMapping("/api/1.0/users")
     public ResponseEntity<?> createUser(@RequestBody User user) {
+        ApiError apiError = new ApiError(400, "Validation Error", "/api/1.0/users");
+        Map<String, String> validationErrors = new HashMap<>();
         String username = user.getUsername();
+        String displayName = user.getDisplayName();
+
+
         if (username == null || username.isEmpty()) {
-            ApiError apiError = new ApiError(400, "Validation Error", "/api/1.0/users");
-            Map<String, String> validationErrors = new HashMap<>();
             validationErrors.put("username", "Username is required");
+        }
+
+        if (displayName == null || displayName.isEmpty()) {
+            validationErrors.put("displayName", "Display Name is required");
+        }
+
+        if (validationErrors.size() > 0) {
             apiError.setValidationErrors(validationErrors);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
         }
