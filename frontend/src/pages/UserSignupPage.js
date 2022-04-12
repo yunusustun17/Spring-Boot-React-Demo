@@ -10,6 +10,13 @@ class UserSignupPage extends Component {
         passwordRepeat: null,
         agreedClicked: false,
         pendingApiCall: false,
+        errors: {
+            username: null,
+            displayName: null,
+            password: null,
+            passwordRepeat: null,
+            agreed: null
+        }
     }
 
     onChangeAgree = event => {
@@ -19,9 +26,12 @@ class UserSignupPage extends Component {
     }
 
     onChange = event => {
-        const {name, value} = event.target
+        const {name, value} = event.target;
+        const {errors} = {...this.state};
+        errors[name] = null;
         this.setState({
-            [name]: value
+            [name]: value,
+            errors
         })
     }
 
@@ -38,13 +48,19 @@ class UserSignupPage extends Component {
             pendingApiCall: true
         });
 
-        try{
+        try {
             const response = await signup(body);
             if (response.status === 200) {
                 console.log("redirect to /login");
             }
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            const {validationErrors} = error.response.data;
+            if (validationErrors) {
+                this.setState({
+                    errors: error.response.data.validationErrors,
+                })
+            }
+            console.log(error);
         } finally {
             this.setState({
                 pendingApiCall: false
@@ -64,14 +80,17 @@ class UserSignupPage extends Component {
     }
 
     render() {
-        const {username, displayName, password, passwordRepeat, agreedClicked, pendingApiCall} = this.state;
+        const {pendingApiCall, errors, agreedClicked} = this.state;
+        const {username} = errors;
         return (
             <div className="container">
                 <form className="form-group">
                     <h1 className="text-center">Sign Up</h1>
                     <div>
                         <label>Username</label>
-                        <input name="username" className="form-control" onChange={this.onChange}></input>
+                        <input name="username" className={username ? "form-control is-invalid" : "form-control"}
+                               onChange={this.onChange}></input>
+                        <div className="invalid-feedback">{username}</div>
                     </div>
                     <div>
                         <label>Display Name</label>
