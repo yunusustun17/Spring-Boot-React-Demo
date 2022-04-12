@@ -1,5 +1,5 @@
 import {Component} from "react";
-import axios from "axios";
+import {signup} from "../api/apiClass";
 
 class UserSignupPage extends Component {
 
@@ -25,7 +25,7 @@ class UserSignupPage extends Component {
         })
     }
 
-    onClickSignup = event => {
+    onClickSignup = async event => {
         event.preventDefault();
         const {username, displayName, password, passwordRepeat, agreedClicked} = this.state;
         const body = {
@@ -38,19 +38,33 @@ class UserSignupPage extends Component {
             pendingApiCall: true
         });
 
-        axios.post("/api/1.0/users", body)
-            .then(response => {
-                this.setState({
-                    pendingApiCall: false
-                });
-            }).catch(error => {
+        try{
+            const response = await signup(body);
+            if (response.status === 200) {
+                console.log("redirect to /login");
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
             this.setState({
                 pendingApiCall: false
             });
-        });
+        }
+
+        // signup(body)
+        //     .then(response => {
+        //         this.setState({
+        //             pendingApiCall: false
+        //         });
+        //     }).catch(error => {
+        //     this.setState({
+        //         pendingApiCall: false
+        //     });
+        // });
     }
 
     render() {
+        const {username, displayName, password, passwordRepeat, agreedClicked, pendingApiCall} = this.state;
         return (
             <div className="container">
                 <form className="form-group">
@@ -79,8 +93,9 @@ class UserSignupPage extends Component {
                     </div>
                     <div className="text-center">
                         <button onClick={this.onClickSignup} className="btn btn-primary"
-                                disabled={!this.state.agreedClicked || this.state.pendingApiCall}>
-                            {this.state.pendingApiCall && <span className="spinner-border spinner-border-sm"></span>} Sign Up
+                                disabled={!agreedClicked || pendingApiCall}>
+                            {pendingApiCall &&
+                                <span className="spinner-border spinner-border-sm"></span>} Sign Up
                         </button>
                     </div>
                 </form>
