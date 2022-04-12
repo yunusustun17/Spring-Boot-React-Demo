@@ -11,6 +11,7 @@ import yunus.ustun.demo.common.GenericResponse;
 import yunus.ustun.demo.user.model.User;
 import yunus.ustun.demo.user.service.UserService;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/1.0/users")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         ApiError apiError = new ApiError(400, "Validation Error", "/api/1.0/users");
         Map<String, String> validationErrors = new HashMap<>();
         String username = user.getUsername();
