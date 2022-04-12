@@ -8,7 +8,8 @@ class UserSignupPage extends Component {
         displayName: null,
         password: null,
         passwordRepeat: null,
-        agreedClicked: false
+        agreedClicked: false,
+        pendingApiCall: false,
     }
 
     onChangeAgree = event => {
@@ -33,7 +34,20 @@ class UserSignupPage extends Component {
             password,
         }
 
-        axios.post("/api/1.0/users", body);
+        this.setState({
+            pendingApiCall: true
+        });
+
+        axios.post("/api/1.0/users", body)
+            .then(response => {
+                this.setState({
+                    pendingApiCall: false
+                });
+            }).catch(error => {
+            this.setState({
+                pendingApiCall: false
+            });
+        });
     }
 
     render() {
@@ -51,17 +65,23 @@ class UserSignupPage extends Component {
                     </div>
                     <div>
                         <label>Password</label>
-                        <input name="password" className="form-control" type="password" onChange={this.onChange}></input>
+                        <input name="password" className="form-control" type="password"
+                               onChange={this.onChange}></input>
                     </div>
                     <div>
                         <label>Password Repeat</label>
-                        <input name="passwordRepeat" className="form-control" type="password" onChange={this.onChange}></input>
+                        <input name="passwordRepeat" className="form-control" type="password"
+                               onChange={this.onChange}></input>
                     </div>
                     <div>
-                        <input name="agreedClicked" className="form-check" type="checkbox" onChange={this.onChangeAgree}></input> Agreed
+                        <input name="agreedClicked" className="form-check" type="checkbox"
+                               onChange={this.onChangeAgree}></input> Agreed
                     </div>
                     <div className="text-center">
-                        <button onClick={this.onClickSignup} className="btn btn-primary" disabled={!this.state.agreedClicked}>Sign Up</button>
+                        <button onClick={this.onClickSignup} className="btn btn-primary"
+                                disabled={!this.state.agreedClicked || this.state.pendingApiCall}>
+                            {this.state.pendingApiCall && <span className="spinner-border spinner-border-sm"></span>} Sign Up
+                        </button>
                     </div>
                 </form>
             </div>
