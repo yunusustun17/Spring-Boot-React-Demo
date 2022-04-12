@@ -38,31 +38,33 @@ class UserSignupPage extends Component {
 
     render() {
         return (
-            <form>
-                <h1>Sign Up</h1>
-                <div>
-                    <label>Username</label>
-                    <input name="username" onChange={this.onChange}></input>
-                </div>
-                <div>
-                    <label>Display Name</label>
-                    <input name="displayName" onChange={this.onChange}></input>
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input name="password" type="password" onChange={this.onChange}></input>
-                </div>
-                <div>
-                    <label>Password Repeat</label>
-                    <input name="passwordRepeat" type="password" onChange={this.onChange}></input>
-                </div>
-                <div>
-                    <input name="agreedClicked" type="checkbox" onChange={this.onChangeAgree}></input> Agreed
-                </div>
-                <div>
-                    <button onClick={this.onClickSignup} disabled={!this.state.agreedClicked}>Sign Up</button>
-                </div>
-            </form>
+            <div className="container">
+                <form className="form-group">
+                    <h1 className="text-center">Sign Up</h1>
+                    <div>
+                        <label>Username</label>
+                        <input name="username" className="form-control" onChange={this.onChange}></input>
+                    </div>
+                    <div>
+                        <label>Display Name</label>
+                        <input name="displayName" className="form-control" onChange={this.onChange}></input>
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input name="password" className="form-control" type="password" onChange={this.onChange}></input>
+                    </div>
+                    <div>
+                        <label>Password Repeat</label>
+                        <input name="passwordRepeat" className="form-control" type="password" onChange={this.onChange}></input>
+                    </div>
+                    <div>
+                        <input name="agreedClicked" className="form-check" type="checkbox" onChange={this.onChangeAgree}></input> Agreed
+                    </div>
+                    <div className="text-center">
+                        <button onClick={this.onClickSignup} className="btn btn-primary" disabled={!this.state.agreedClicked}>Sign Up</button>
+                    </div>
+                </form>
+            </div>
         );
     }
 }
