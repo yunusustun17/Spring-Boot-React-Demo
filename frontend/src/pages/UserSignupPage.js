@@ -89,16 +89,8 @@ class UserSignupPage extends Component {
                     <h1 className="text-center">Sign Up</h1>
                     <Input name="username" label="Username" error={username} onChange={this.onChange}/>
                     <Input name="displayName" label="Display Name" error={displayName} onChange={this.onChange}/>
-                    <div>
-                        <label>Password</label>
-                        <input name="password" className="form-control" type="password"
-                               onChange={this.onChange}></input>
-                    </div>
-                    <div>
-                        <label>Password Repeat</label>
-                        <input name="passwordRepeat" className="form-control" type="password"
-                               onChange={this.onChange}></input>
-                    </div>
+                    <Input name="password" label="Password" type="password" error={errors.password} onChange={this.onChange}/>
+                    <Input name="passwordRepeat" label="Repeat Password" type="password" error={errors.passwordRepeat} onChange={this.onChange}/>
                     <div>
                         <input name="agreedClicked" className="form-check" type="checkbox"
                                onChange={this.onChangeAgree}></input> Agreed
