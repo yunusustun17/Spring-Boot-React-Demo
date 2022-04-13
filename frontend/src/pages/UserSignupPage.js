@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {signup} from "../api/apiClass";
+import {changeLanguage, signup} from "../api/apiClass";
 import Input from "../components/input";
 import {withTranslation} from 'react-i18next';
 
@@ -45,6 +45,12 @@ class UserSignupPage extends Component {
             [name]: value,
             errors
         })
+    }
+
+    onChangeLanguage = language => {
+        const {i18n} = this.props;
+        i18n.changeLanguage(language);
+        changeLanguage(language);
     }
 
     onClickSignup = async event => {
@@ -101,7 +107,8 @@ class UserSignupPage extends Component {
                     <h1 className="text-center">{t('Sign Up')}</h1>
                     <Input name="username" label={t('Username')} error={username} onChange={this.onChange}/>
                     <Input name="displayName" label={t('Display Name')} error={displayName} onChange={this.onChange}/>
-                    <Input name="password" label={t('Password')} type="password" error={password} onChange={this.onChange}/>
+                    <Input name="password" label={t('Password')} type="password" error={password}
+                           onChange={this.onChange}/>
                     <Input name="passwordRepeat" label={t('Repeat Password')} type="password" error={passwordRepeat}
                            onChange={this.onChange}/>
                     <div>
@@ -114,6 +121,10 @@ class UserSignupPage extends Component {
                             {pendingApiCall &&
                                 <span className="spinner-border spinner-border-sm"></span>} {t('Sign Up')}
                         </button>
+                    </div>
+                    <div>
+                        <a href="#" onClick={() => this.onChangeLanguage('tr')}>turkish </a>
+                        <a href="#" onClick={() => this.onChangeLanguage('en')}>english </a>
                     </div>
                 </form>
             </div>
