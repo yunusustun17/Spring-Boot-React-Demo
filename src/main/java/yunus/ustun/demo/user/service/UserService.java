@@ -11,7 +11,6 @@ import yunus.ustun.demo.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    // TODO: 12.04.2022 initialize password encoder with spring boot
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void save(User user) {
