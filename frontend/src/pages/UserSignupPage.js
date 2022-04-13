@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {changeLanguage, signup} from "../api/apiClass";
+import {signup} from "../api/apiClass";
 import Input from "../components/input";
 import {withTranslation} from 'react-i18next';
 
@@ -47,12 +47,6 @@ class UserSignupPage extends Component {
         })
     }
 
-    onChangeLanguage = language => {
-        const {i18n} = this.props;
-        i18n.changeLanguage(language);
-        changeLanguage(language);
-    }
-
     onClickSignup = async event => {
         event.preventDefault();
         const {username, displayName, password, passwordRepeat, agreedClicked} = this.state;
@@ -84,17 +78,6 @@ class UserSignupPage extends Component {
                 pendingApiCall: false
             });
         }
-
-        // signup(body)
-        //     .then(response => {
-        //         this.setState({
-        //             pendingApiCall: false
-        //         });
-        //     }).catch(error => {
-        //     this.setState({
-        //         pendingApiCall: false
-        //     });
-        // });
     }
 
     render() {
@@ -121,10 +104,6 @@ class UserSignupPage extends Component {
                             {pendingApiCall &&
                                 <span className="spinner-border spinner-border-sm"></span>} {t('Sign Up')}
                         </button>
-                    </div>
-                    <div>
-                        <a href="#" onClick={() => this.onChangeLanguage('tr')}>turkish </a>
-                        <a href="#" onClick={() => this.onChangeLanguage('en')}>english </a>
                     </div>
                 </form>
             </div>
