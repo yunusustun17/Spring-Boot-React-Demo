@@ -30,6 +30,15 @@ class UserSignupPage extends Component {
         const {name, value} = event.target;
         const {errors} = {...this.state};
         errors[name] = null;
+        if (name === "password" || name === "passwordRepeat") {
+            if (name === "password" && value !== this.state.passwordRepeat) {
+                errors.passwordRepeat = "Passwords do not match";
+            } else if (name === "passwordRepeat" && value !== this.state.password) {
+                errors.passwordRepeat = "Passwords do not match";
+            } else {
+                errors.passwordRepeat = null;
+            }
+        }
         this.setState({
             [name]: value,
             errors
@@ -82,22 +91,23 @@ class UserSignupPage extends Component {
 
     render() {
         const {pendingApiCall, errors, agreedClicked} = this.state;
-        const {username, displayName} = errors;
+        const {username, displayName, password, passwordRepeat} = errors;
         return (
             <div className="container">
                 <form className="form-group">
                     <h1 className="text-center">Sign Up</h1>
                     <Input name="username" label="Username" error={username} onChange={this.onChange}/>
                     <Input name="displayName" label="Display Name" error={displayName} onChange={this.onChange}/>
-                    <Input name="password" label="Password" type="password" error={errors.password} onChange={this.onChange}/>
-                    <Input name="passwordRepeat" label="Repeat Password" type="password" error={errors.passwordRepeat} onChange={this.onChange}/>
+                    <Input name="password" label="Password" type="password" error={password} onChange={this.onChange}/>
+                    <Input name="passwordRepeat" label="Repeat Password" type="password" error={passwordRepeat}
+                           onChange={this.onChange}/>
                     <div>
                         <input name="agreedClicked" className="form-check" type="checkbox"
                                onChange={this.onChangeAgree}></input> Agreed
                     </div>
                     <div className="text-center">
                         <button onClick={this.onClickSignup} className="btn btn-primary"
-                                disabled={!agreedClicked || pendingApiCall}>
+                                disabled={!agreedClicked || pendingApiCall || passwordRepeat}>
                             {pendingApiCall &&
                                 <span className="spinner-border spinner-border-sm"></span>} Sign Up
                         </button>
