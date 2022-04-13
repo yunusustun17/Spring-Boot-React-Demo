@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
         validatedBy = {UniqueUsernameValidator.class}
 )
 public @interface UniqueUsername {
-    String message() default "Bu kullanıcı adı daha önce kullanılmış";
+    String message() default "{demo.validation.constraints.username.UniqueUsername.message}";
     Class<?>[] groups() default {};
     Class<?>[] payload() default {};
 }
