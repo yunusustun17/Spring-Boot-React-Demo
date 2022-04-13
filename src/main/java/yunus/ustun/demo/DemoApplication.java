@@ -22,6 +22,7 @@ public class DemoApplication {
             user.setUsername("yunus");
             user.setPassword("passwd");
             user.setDisplayName("Yunus Üstün");
+            user.setImage("https://avatars1.githubusercontent.com/u/12058981?s=460&v=4");
             userService.save(user);
         };
     }

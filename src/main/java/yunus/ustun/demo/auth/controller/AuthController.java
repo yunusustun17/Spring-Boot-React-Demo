@@ -1,5 +1,6 @@
 package yunus.ustun.demo.auth.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import yunus.ustun.demo.common.ApiError;
+import yunus.ustun.demo.common.Views;
 import yunus.ustun.demo.user.model.User;
 import yunus.ustun.demo.user.repository.UserRepository;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/api/1.0/auth")
+    @JsonView(Views.Base.class)
     public ResponseEntity<?> handleAuthentication(@RequestHeader(name = "Authorization", required = false) String authorization) {
         if (authorization == null) {
             ApiError apiError = new ApiError(401, "Unauthorized", "/api/1.0/auth");
@@ -45,6 +51,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(inDatabase);
     }
 }
