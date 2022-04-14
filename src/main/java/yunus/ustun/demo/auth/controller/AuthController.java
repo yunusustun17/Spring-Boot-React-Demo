@@ -23,8 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+    private final PasswordEncoder passwordEncoder;
     @PostMapping("/api/1.0/auth")
     @JsonView(Views.Base.class)
     public ResponseEntity<?> handleAuthentication(@RequestHeader(name = "Authorization", required = false) String authorization) {

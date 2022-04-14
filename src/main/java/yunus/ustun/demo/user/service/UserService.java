@@ -11,7 +11,7 @@ import yunus.ustun.demo.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
