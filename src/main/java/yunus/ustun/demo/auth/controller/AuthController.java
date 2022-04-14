@@ -2,22 +2,15 @@ package yunus.ustun.demo.auth.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
-import yunus.ustun.demo.common.ApiError;
+import org.springframework.web.bind.annotation.*;
+import yunus.ustun.demo.error.ApiError;
 import yunus.ustun.demo.common.Views;
 import yunus.ustun.demo.user.model.User;
 import yunus.ustun.demo.user.repository.UserRepository;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,5 +44,11 @@ public class AuthController {
         }
 
         return ResponseEntity.ok(inDatabase);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleBadCredentials(BadCredentialsException e) {
+        return new ApiError(401, "Unauthorized", "/api/1.0/auth");
     }
 }

@@ -26,6 +26,7 @@ class LoginPage extends Component {
 
         login(credentials)
             .then(response => {
+                console.log(response);
                 if (response.status === 200) {
                     console.log(response);
                 }

@@ -1,8 +1,9 @@
-package yunus.ustun.demo.common;
+package yunus.ustun.demo.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import yunus.ustun.demo.common.Views;
 
 import java.util.Date;
 import java.util.Map;

@@ -6,17 +6,20 @@ spring:
     # save to memory
     url: jdbc:h2:mem:testdb
     # save to file
-#    url: jdbc:h2:file:/tmp/testdb
+    #    url: jdbc:h2:file:/tmp/testdb
     driver-class-name: org.h2.Driver
     username: sa
     password:
   jpa:
-#    hibernate:
-      # save to file
-#      ddl-auto: update
+    #    hibernate:
+    # save to file
+    #      ddl-auto: update
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       javax:
         persistence:
           validation:
             mode: none
+logging:
+  level:
+    org.springframework: DEBUG
