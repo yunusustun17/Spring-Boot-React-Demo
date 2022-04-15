@@ -8,10 +8,13 @@ import LoginPage from './pages/LoginPage';
 import LanguageSelector from "./components/languageSelector";
 import reportWebVitals from './reportWebVitals';
 import './i18n';
+import ApiProgress from "./common/ApiProgress";
 
 ReactDOM.render(
   <React.StrictMode>
     <div>
+        <ApiProgress>
+        </ApiProgress>
         <LoginPage />
         <LanguageSelector />
     </div>
