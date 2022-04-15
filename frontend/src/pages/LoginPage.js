@@ -2,11 +2,29 @@ import React, {Component} from "react";
 import Input from "../components/input";
 import {withTranslation} from "react-i18next";
 import {login} from "../api/apiClass";
+import axios from "axios";
+import ButtonWithProgress from "../components/buttonWithProgress";
 
 class LoginPage extends Component {
     state = {
         username: null,
         password: null,
+        pendingApiCall: null,
+    }
+
+    componentDidMount() {
+        axios.interceptors.request.use( request => {
+            this.setState({pendingApiCall: true});
+            return request;
+        });
+
+        axios.interceptors.response.use( response => {
+            this.setState({pendingApiCall: false});
+            return response;
+        }, error => {
+            this.setState({pendingApiCall: false});
+            throw error;
+        });
     }
 
     onChange = event => {
@@ -38,6 +56,7 @@ class LoginPage extends Component {
 
     render() {
         const {t} = this.props;
+        const buttonEnabled = this.state.username && this.state.password;
         return (
             <div className="container">
                 <form>
@@ -45,7 +64,12 @@ class LoginPage extends Component {
                     <Input label={t("Username")} name="username" onChange={this.onChange}/>
                     <Input label={t("Password")} name="password" type="password" onChange={this.onChange}/>
                     <div className="text-center">
-                        <button onClick={this.onClickLogin} className="btn btn-primary">{t("Login")}</button>
+                        <ButtonWithProgress
+                            text={t("Login")}
+                            onClick={this.onClickLogin}
+                            pendingApiCall={this.state.pendingApiCall}
+                            disabled={!buttonEnabled || this.state.pendingApiCall}
+                        />
                     </div>
                 </form>
             </div>
